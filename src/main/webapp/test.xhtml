@@ -1,23 +1,58 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-	xmlns:jsf="http://xmlns.jcp.org/jsf"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+  xmlns:jsf="http://xmlns.jcp.org/jsf"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+>
+  <h:head>
+    <title>PrimeFaces Test</title>
+    <h:outputScript name="test.js" />
+    <h:outputStylesheet name="test.css" />
+  </h:head>
+  <h:body>
+    <f:metadata>
+      <f:event type="preRenderView" listener="#{testView.showValueType()}" update="frmTest:type"/>
+    </f:metadata>
 
-    <h:head>
-        <title>PrimeFaces Test</title>
-        <h:outputScript name="test.js" />
-        <h:outputStylesheet name="test.css" />
-    </h:head>
-    <h:body>
+    <h1>Primefaces test</h1>
+    <h:form id="frmTest">
+      <p:tag id="type" styleClass="mr-2" value="#{testView.string}"></p:tag>
 
-        <h1>#{testView.string}</h1>
-        <h:form id="frmTest">
-            
-        </h:form>
+      <p:dataTable
+        id="songs"
+        var="song"
+        value="#{testView.list}"
+        rowKey="#{singer.name}"
+        sortBy="#{singer.name}"
+        binding="#{testView.table}"
+        widgetVar="tableWidget"
+      >
+        <p:ajax event="filter" listener="#{testView.showValueType()}" update="frmTest:type" />
+        <p:ajax event="sort" listener="#{testView.showValueType()}" update="frmTest:type"/>
+        <p:column
+          headerText="Name"
+          sortBy="#{song.name}"
+          filterMatchMode="contains"
+          filterBy="#{song.name}"
+        >
+          <f:facet name="filter">
+            <p:inputText onchange="PF('tableWidget').filter()" />
+          </f:facet>
+          <p:inputText value="#{song.name}" />
+        </p:column>
+        <p:column headerText="Artist" sortBy="#{song.artist}">
+          <p:inputText value="#{song.artist}" />
+        </p:column>
 
-    </h:body>
+        <p:column headerText="Released" sortBy="#{song.released}">
+          <p:inputText value="#{song.released}" />
+        </p:column>
+      </p:dataTable>
+
+    </h:form>
+  </h:body>
 </html>

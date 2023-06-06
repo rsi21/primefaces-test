@@ -5,10 +5,11 @@ import java.time.LocalDateTime;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+
+import org.primefaces.component.datatable.DataTable;
 
 import lombok.Data;
 
@@ -21,17 +22,35 @@ public class TestView implements Serializable {
     private Integer integer;
     private BigDecimal decimal;
     private LocalDateTime localDateTime;
-    private List<TestObject> list;
+
+    private TestModel<TestObject> list;
+    private DataTable table;
     
     @PostConstruct  
     public void init() {
-        string = "Welcome to PrimeFaces!!!";
-        list = new ArrayList<>(Arrays.asList(
+        ArrayList<TestObject> values = new ArrayList<>(Arrays.asList(
                 new TestObject("Thriller", "Michael Jackson", 1982),
                 new TestObject("Back in Black", "AC/DC", 1980),
                 new TestObject("The Bodyguard", "Whitney Houston", 1992),
                 new TestObject("The Dark Side of the Moon", "Pink Floyd", 1973)
         ));
+        list = new TestModel<>(values);
+        string = "";
     }
 
+
+    public DataTable getTable()
+    {
+        return table;
+    }
+
+    public void setTable(DataTable table)
+    {
+        this.table = table;
+    }
+
+    public void showValueType()
+    {
+        string = table.getValue().getClass().toString();
+    }
 }
